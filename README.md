@@ -1,1 +1,1 @@
-# golang-webscrapper-docker-tutorial
+# golang-webscrapper-tutorial
