@@ -1,12 +1,7 @@
 FROM golang:onbuild
 
-# ADD . /go/src/golang-webscrapper-docker-tutorial
-
-
-# ENTRYPOINT /go/bin/golang-webscrapper-docker-tutorial
-
-# RUN go install golang-webscrapper-docker-tutorial
-
 RUN go get golang.org/x/tour/gotour
+RUN go get github.com/go-redis/redis
+RUN go get github.com/pilu/fresh
 
 EXPOSE 8080

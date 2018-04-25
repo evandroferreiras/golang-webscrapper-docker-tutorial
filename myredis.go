@@ -8,7 +8,7 @@ import (
 
 func getClient() (r *redis.Client) {
 	r = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     "redis:6379",
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
@@ -46,16 +46,14 @@ func SetTotalURLs(total int) {
 }
 
 // GetTotalURLs : Get total urls from redis
-func GetTotalURLs() (total int) {
+func GetTotalURLs() (total int, err error) {
 	client := getClient()
 	v, err := client.Get("TotalUrls").Result()
 	if err != nil {
-		panic(err)
+		return 0, err
 	}
 	total, err = strconv.Atoi(v)
-	if err != nil {
-		panic(err)
-	}
+
 	return
 }
 

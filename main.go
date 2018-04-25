@@ -20,8 +20,10 @@ func (r Result) String() string {
 }
 
 func handlerLastProcess(w http.ResponseWriter, r *http.Request) {
-
-	total := GetTotalURLs()
+	total, err := GetTotalURLs()
+	if err != nil {
+		fmt.Fprintln(w, "There is no data")
+	}
 	for index := 0; index < total; index++ {
 		url := GetURL(index)
 		fmt.Fprintln(w, "Url:", url, "Claps:", GetURLLikes(url))
