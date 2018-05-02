@@ -17,32 +17,24 @@ func getClient() (r *redis.Client) {
 }
 
 //SetURL : Set url
-func SetURL(index int, url string) {
+func SetURL(index int, url string) (err error) {
 	client := getClient()
-	err := client.Set("url"+string(index), url, 0).Err()
-	if err != nil {
-		panic(err)
-	}
+	err = client.Set("url"+string(index), url, 0).Err()
+	return
 }
 
 //GetURL : Set url
-func GetURL(index int) (url string) {
+func GetURL(index int) (url string, err error) {
 	client := getClient()
-	v, err := client.Get("url" + string(index)).Result()
-	if err != nil {
-		panic(err)
-	}
-	url = v
+	url, err = client.Get("url" + string(index)).Result()
 	return
 }
 
 //SetTotalURLs : Set total urls to redis
-func SetTotalURLs(total int) {
+func SetTotalURLs(total int) (err error) {
 	client := getClient()
-	err := client.Set("TotalUrls", total, 0).Err()
-	if err != nil {
-		panic(err)
-	}
+	err = client.Set("TotalUrls", total, 0).Err()
+	return
 }
 
 // GetTotalURLs : Get total urls from redis

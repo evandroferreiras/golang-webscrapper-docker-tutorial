@@ -25,7 +25,12 @@ func handlerLastProcess(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "There is no data")
 	}
 	for index := 0; index < total; index++ {
-		url := GetURL(index)
+		url, err := GetURL(index)
+		if err != nil {
+			fmt.Fprintln(w, "Error when acessing redis:", err)
+			return
+		}
+
 		fmt.Fprintln(w, "Url:", url, "Claps:", GetURLLikes(url))
 	}
 }
@@ -45,8 +50,12 @@ func handlerProcessUrls(w http.ResponseWriter, r *http.Request) {
 
 	index := 0
 	for res := range cRes {
+		err := SetURL(index, res.url)
+		if err != nil {
+			fmt.Fprintln(w, "Error when acessing redis:", err)
+			return
+		}
 		fmt.Fprintln(w, res)
-		SetURL(index, res.url)
 		index = index + 1
 		SetURLLikes(res.url, res.likes)
 		SetTotalURLs(index)
@@ -54,7 +63,12 @@ func handlerProcessUrls(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "(Took ", time.Since(ini).Seconds(), "secs)")
 }
 
+func handlerMainProcess(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "Nothing here. Use /process-urls/ and /last-process/ ")
+}
+
 func main() {
+	http.HandleFunc("/", handlerMainProcess)
 	http.HandleFunc("/process-urls/", handlerProcessUrls)
 	http.HandleFunc("/last-process/", handlerLastProcess)
 	log.Fatal(http.ListenAndServe(":8080", nil))
