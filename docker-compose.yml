@@ -5,7 +5,7 @@ services:
   web:
     build: .
     ports:
-     - "8080:8080"
+     - "6060:8080"
     command: fresh
     volumes:    
      - .:/go/src/app
